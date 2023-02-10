@@ -2,8 +2,7 @@ from evdev import list_devices, InputDevice, categorize, ecodes, KeyEvent
 import time
 
 # CONSTANTS
-vertical_threshold = 2000
-horizontal_threshold = 2000
+THRESHOLD = 3000
 
 #  GET INPUT EVENTS FROM DEVICES
 calibrated = False
@@ -18,43 +17,57 @@ for device in devices:
         controller = device
 
 
-# Process all events
+#######################
+#### EVENT READING ####
+#######################
 for event in controller.read_loop():
     keyevent = categorize(event)
 
-#     Read Button Presses
+#### BUTTONS
     if (event.type == ecodes.EV_KEY):
         print(keyevent.keycode)
-#         Detecting down presses only
+        #Detecting down presses only
 
-#       X
+        #X
         if (keyevent.keycode[0] == 'BTN_NORTH' and keyevent.keystate == KeyEvent.key_down):
             print('X')
-#       A
+        #A
         if (keyevent.keycode[0] == 'BTN_A' and keyevent.keystate == KeyEvent.key_down):
             print('A')
-#       Y
+        #Y
         if (keyevent.keycode[0] == 'BTN_WEST' and keyevent.keystate == KeyEvent.key_down):
             print('Y')
-            if (calibrated == False):
-
-                #       B
+        #B
         if (keyevent.keycode[0] == 'BTN_B' and keyevent.keystate == KeyEvent.key_down):
             print('B')
 
+#### JOYSTICKS
     elif (event.type == ecodes.EV_ABS):
+        #print(str(keyevent) + " code: " + str(event.code))
         val = event.value
-        if (event.code == 1):
-            val = -val
-            print(f'Left Stick Y: {val}')
-            if (val >= vertical_threshold):
-                print('left forward')
-#         print(str(keyevent) + " code: " + str(event.code))
-#         if(event.code ==0):
-#             print(f'Left Stick X: {val}')
-#         if(event.code ==3):
-#             print(f'Right Stick X: {val}')
-#         if(event.code ==4):
-#             print(f'Right Stick Y: {val}')
+        # Ensure it's above threshold
+        if(abs(val) < THRESHOLD):
+            val = 0
+        
+        #### NEED TO DOUBLE CHECK DIRECTIONS AND SIGN FLIPS
+        # Left Stick X
+        if (event.code == 0 and val > 0):
+            print(f'LS Right: {val}')
+        if (event.code == 0 and val < 0):
+            print(f'LS Left: {val}')
+        # Left Stick Y (Signs are backwards from intuition)
+        if (event.code == 1 and val > 0):
+            print(f'LS Backward: {val}')
+        if (event.code == 1 and val < 0):
+            print(f'LS Forward: {val}')
+        # Left Stick X
+        if (event.code == 3 and val > 0):
+            print(f'RS Right: {val}')
+        if (event.code == 3 and val < 0):
+            print(f'RS Left: {val}')
+        # Left Stick Y (Signs are backwards from intuition)
+        if (event.code == 4 and val > 0):
+            print(f'RS Backward: {val}')
+        if (event.code == 4 and val < 0):
+            print(f'RS Forward: {val}')
 
-        pass
