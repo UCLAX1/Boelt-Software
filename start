@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+if [ -d "venv" ] 
+then
+    echo "Virtual environment already exists" 
+else
+    echo "Creating virtual envioronment..."
+    python -m venv venv
+fi
+source venv/bin/activate
+pip3 install -r requirements.txt
+

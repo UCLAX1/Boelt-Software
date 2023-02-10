@@ -1,0 +1,10 @@
+# Geometry Parameters of boelt
+
+Config:
+  ID: "Bruinbot"
+  Thetas: 
+    - 12
+    - 19
+    - 43
+  Offset1: 34
+
