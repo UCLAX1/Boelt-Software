@@ -19,12 +19,25 @@ Here's how it works
 
 # imports
 from time import sleep, time
-from src.xbox.xbox_input import input_loop, ControllerState
+from src.xbox.xbox_input import input_loop, ControllerState, controllerState
 import threading
+
+def x_test():
+    print("X pressed")
+def y_test():
+    print("Y pressed")
+def b_test():
+    print("B pressed")
+def a_test():
+    print("A pressed")
 
 def main():
     thread = threading.Thread(target=input_loop)
     thread.start()
+    controllerState.setButtonCallback_X('x', x_test)
+    controllerState.setButtonCallback_X('y', y_test)
+    controllerState.setButtonCallback_X('b', b_test)
+    controllerState.setButtonCallback_X('a', a_test)
 
     # Main Loop
     # while True:

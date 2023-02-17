@@ -20,13 +20,27 @@ class ControllerState:
                 self.controller = device
         self.joysticks = {"ls_x": 0, "ls_y": 0, "rs_x": 0, "rs_y": 0}
         self.callback_x = None
+        self.callback_y = None
+        self.callback_b = None
+        self.callback_a = None
+        self.x_down = False
+        self.y_down = False
+        self.b_down = False
+        self.a_down = False
 
     #####################
     ## UPDATE FUNCTION ##
     #####################
 
-    def setCallback_X(self, func):
-        self.callback_x = func
+    def setButtonCallback_X(self, button, func):
+        if button == 'x':
+            self.callback_x = func
+        elif button == 'y':
+            self.callback_y = func
+        elif button == 'b':
+            self.callback_b = func
+        elif button == 'a':
+            self.callback_a = func
 
     def update(self, event):
         keyevent = categorize(event)
@@ -36,17 +50,24 @@ class ControllerState:
             # Detecting down presses only
             # X
             if (keyevent.keycode[0] == 'BTN_NORTH' and keyevent.keystate == KeyEvent.key_down):
+                self.x_down = True if keyevent.keystate == KeyEvent.key_down else False
                 if (self.callback_x):
                     self.callback_x()
             # A
             if (keyevent.keycode[0] == 'BTN_A' and keyevent.keystate == KeyEvent.key_down):
-                print('A')
+                self.a_down = True if keyevent.keystate == KeyEvent.key_down else False
+                if (self.callback_a):
+                    self.callback_a()
             # Y
             if (keyevent.keycode[0] == 'BTN_WEST' and keyevent.keystate == KeyEvent.key_down):
-                print('Y')
+                self.y_down = True if keyevent.keystate == KeyEvent.key_down else False
+                if (self.callback_y):
+                    self.callback_y()
             # B
             if (keyevent.keycode[0] == 'BTN_B' and keyevent.keystate == KeyEvent.key_down):
-                print('B')
+                self.b_down = True if keyevent.keystate == KeyEvent.key_down else False
+                if (self.callback_b):
+                    self.callback_b()
 
 # JOYSTICKS
         elif (event.type == ecodes.EV_ABS):
@@ -60,9 +81,11 @@ class ControllerState:
             # Left Stick X
             if (event.code == 0):
                 if (val-self.CENTERS["LS_X"] > self.THRESHOLD):
-                    print(f'LS Right: {val}')
+                    #print(f'LS Right: {val}')
+                    pass
                 if (val+self.CENTERS["LS_X"] < self.THRESHOLD):
-                    print(f'LS Right: {val}')
+                    #print(f'LS Right: {val}')
+                    pass
             # Faster version: (Don't know if it matters, little difference)
             # if (event.code == 0 and val > 0):
             #     print(f'LS Right: {val}')
@@ -72,22 +95,29 @@ class ControllerState:
             # Left Stick Y (Signs are backwards from intuition)
             if (event.code == 1):
                 if (val-self.CENTERS["LS_Y"] > self.THRESHOLD):
-                    print(f'LS Backward: {val}')
+                    #print(f'LS Backward: {val}')
+                    pass
                 if (val+self.CENTERS["LS_Y"] < self.THRESHOLD):
-                    print(f'LS Forward: {val}')
+                    #print(f'LS Forward: {val}')
+                    pass
 
             # Right Stick X
             if (event.code == 3):
                 if (val-self.CENTERS["RS_X"] > self.THRESHOLD):
-                    print(f'RS Right: {val}')
+                    #print(f'RS Right: {val}')
+                    pass
                 if (val+self.CENTERS["RS_X"] < self.THRESHOLD):
-                    print(f'RS Right: {val}')
+                    #print(f'RS Right: {val}')
+                    pass
             # Right Stick Y (Signs are backwards from intuition)
             if (event.code == 4):
                 if (val-self.CENTERS["RS_Y"] > self.THRESHOLD):
-                    print(f'RS Backward: {val}')
+                    #print(f'RS Backward: {val}')
+                    pass
                 if (val+self.CENTERS["RS_Y"] < self.THRESHOLD):
-                    print(f'RS Forward: {val}')
+                    #print(f'RS Forward: {val}')
+                    pass
+                
 
 
 #######################
@@ -103,3 +133,5 @@ def input_loop():
 
 
 # In the file where you want to use xbox_input:
+
+
