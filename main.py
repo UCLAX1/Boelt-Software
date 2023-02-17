@@ -38,6 +38,8 @@ def main():
     controllerState.setButtonCallback_X('y', y_test)
     controllerState.setButtonCallback_X('b', b_test)
     controllerState.setButtonCallback_X('a', a_test)
+    while True:
+        print(controllerState.getLS())
 
     # Main Loop
     # while True:
