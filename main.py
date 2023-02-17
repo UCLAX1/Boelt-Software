@@ -19,31 +19,36 @@ Here's how it works
 
 # imports
 from time import sleep, time
+from src.xbox.xbox_input import input_loop, ControllerState
+import threading
 
 def main():
-    # Main Loop
-    while True:
-        # Loop to wait for a command
-        print("Waiting from command")
-        last_loop = time.time()
-        while True:
-            # Read command value from controller
-            if cond:
-                break
-            sleep(0.1)
-        # Command Loop
-        while True:
-            # Run gait controller, based on various inputs
-            # Read in controller command
-            now = time.time()
+    thread = threading.Thread(target=input_loop)
+    thread.start()
 
-            # Check to see if a full cycle time has passed
-            if now - last_loop < config.dt:
-                # if not, skip this iteration of the loop
-                continue
-            last_loop = time.time()
-            if cond:
-                break
+    # Main Loop
+    # while True:
+    #     # Loop to wait for a command
+    #     print("Waiting from command")
+    #     last_loop = time.time()
+    #     while True:
+    #         # Read command value from controller
+    #         if cond:
+    #             break
+    #         sleep(0.1)
+    #     # Command Loop
+    #     while True:
+    #         # Run gait controller, based on various inputs
+    #         # Read in controller command
+    #         now = time.time()
+
+    #         # Check to see if a full cycle time has passed
+    #         if now - last_loop < config.dt:
+    #             # if not, skip this iteration of the loop
+    #             continue
+    #         last_loop = time.time()
+    #         if cond:
+    #             break
 
 
             

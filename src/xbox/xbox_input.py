@@ -3,29 +3,30 @@ import time
 import threading
 
 # CONSTANTS
+
+
 class ControllerState:
     THRESHOLD = 3000
-    CENTERS = {"LS_Y":1000, "LS_X":1000, "RS_Y":1000, "RS_X":1000}
-    
+    CENTERS = {"LS_Y": 1000, "LS_X": 1000, "RS_Y": 1000, "RS_X": 1000}
 
     def __init__(self):
         self.devices = [InputDevice(path) for path in list_devices()]
         self.controller = None
-        for device in devices:
+        for device in self.devices:
             # # print devides to check which is the controller
             #     print(device.path, device.name, device.phys)
             # Set Controller to the device that contains the phrase X-Box
             if ("X-Box" in device.name):
                 self.controller = device
-        self.joysticks = {"ls_x":0,"ls_y":0,"rs_x":0, "rs_y":0}
+        self.joysticks = {"ls_x": 0, "ls_y": 0, "rs_x": 0, "rs_y": 0}
         self.callback_x = None
-
 
     #####################
     ## UPDATE FUNCTION ##
     #####################
+
     def setCallback_X(self, func):
-        self.callback_x=func
+        self.callback_x = func
 
     def update(self, event):
         keyevent = categorize(event)
@@ -35,7 +36,7 @@ class ControllerState:
             # Detecting down presses only
             # X
             if (keyevent.keycode[0] == 'BTN_NORTH' and keyevent.keystate == KeyEvent.key_down):
-                if(self.callback_x):
+                if (self.callback_x):
                     self.callback_x()
             # A
             if (keyevent.keycode[0] == 'BTN_A' and keyevent.keystate == KeyEvent.key_down):
@@ -88,21 +89,17 @@ class ControllerState:
                 if (val+self.CENTERS["RS_Y"] < self.THRESHOLD):
                     print(f'RS Forward: {val}')
 
-    
 
 #######################
 #### EVENT READING ####
 #######################
-
 controllerState = ControllerState()
 
+
 def input_loop():
-    global controller_state
-    for event in controller_state.controller.read_loop():
-        controller_state.update(event)
+    global controllerState
+    for event in controllerState.controller.read_loop():
+        controllerState.update(event)
 
 
-### In the file where you want to use xbox_input:
-# import xbox_input
-thread = threading.Thread(target=input_loop)
-thread.start()
+# In the file where you want to use xbox_input:
