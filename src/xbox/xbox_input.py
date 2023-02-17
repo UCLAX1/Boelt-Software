@@ -6,8 +6,8 @@ import threading
 
 
 class ControllerState:
-    THRESHOLD = 3000
-    CENTERS = {"LS_Y": 1000, "LS_X": 1000, "RS_Y": 1000, "RS_X": 1000}
+    THRESHOLD = 5000
+    CENTERS = {"LS_Y": 1000, "LS_X": 2000, "RS_Y": 1000, "RS_X": 1000}
 
     def __init__(self):
         self.devices = [InputDevice(path) for path in list_devices()]
@@ -19,10 +19,15 @@ class ControllerState:
             if ("X-Box" in device.name):
                 self.controller = device
         self.joysticks = {"ls_x": 0, "ls_y": 0, "rs_x": 0, "rs_y": 0}
+
+        self.ls_state = [0,0]
+        self.rs_state = [0,0]
+
         self.callback_x = None
         self.callback_y = None
         self.callback_b = None
         self.callback_a = None
+
         self.x_down = False
         self.y_down = False
         self.b_down = False
@@ -74,51 +79,40 @@ class ControllerState:
             # print(str(keyevent) + " code: " + str(event.code))
             val = event.value
             # Ensure it's above threshold
-            if (abs(val) < self.THRESHOLD):
-                val = 0
-
+            
             # NEED TO DOUBLE CHECK DIRECTIONS AND SIGN FLIPS
             # Left Stick X
             if (event.code == 0):
-                if (val-self.CENTERS["LS_X"] > self.THRESHOLD):
-                    #print(f'LS Right: {val}')
-                    pass
-                if (val+self.CENTERS["LS_X"] < self.THRESHOLD):
-                    #print(f'LS Right: {val}')
-                    pass
-            # Faster version: (Don't know if it matters, little difference)
-            # if (event.code == 0 and val > 0):
-            #     print(f'LS Right: {val}')
-            # elif (event.code == 0 and val < 0):
-            #     print(f'LS Left: {val}')
-
+                # Testing centers for actual code put this at end of this if
+                if (not(val-self.CENTERS["LS_X"] > self.THRESHOLD or val+self.CENTERS["LS_X"] < -self.THRESHOLD)):
+                    val = 0
+                self.ls_state[0] = val
             # Left Stick Y (Signs are backwards from intuition)
             if (event.code == 1):
-                if (val-self.CENTERS["LS_Y"] > self.THRESHOLD):
-                    #print(f'LS Backward: {val}')
-                    pass
-                if (val+self.CENTERS["LS_Y"] < self.THRESHOLD):
-                    #print(f'LS Forward: {val}')
-                    pass
+                if (not(val-self.CENTERS["LS_Y"] > self.THRESHOLD or val+self.CENTERS["LS_Y"] < -self.THRESHOLD)):
+                    val = 0
+                self.ls_state[1] = -val
 
-            # Right Stick X
-            if (event.code == 3):
-                if (val-self.CENTERS["RS_X"] > self.THRESHOLD):
-                    #print(f'RS Right: {val}')
-                    pass
-                if (val+self.CENTERS["RS_X"] < self.THRESHOLD):
-                    #print(f'RS Right: {val}')
-                    pass
-            # Right Stick Y (Signs are backwards from intuition)
-            if (event.code == 4):
-                if (val-self.CENTERS["RS_Y"] > self.THRESHOLD):
-                    #print(f'RS Backward: {val}')
-                    pass
-                if (val+self.CENTERS["RS_Y"] < self.THRESHOLD):
-                    #print(f'RS Forward: {val}')
-                    pass
-                
+            # # Right Stick X
+            # if (event.code == 3):
+            #     if (val-self.CENTERS["RS_X"] > self.THRESHOLD):
+            #         #print(f'RS Right: {val}')
+            #         pass
+            #     if (val+self.CENTERS["RS_X"] < self.THRESHOLD):
+            #         #print(f'RS Right: {val}')
+            #         pass
+            # # Right Stick Y (Signs are backwards from intuition)
+            # if (event.code == 4):
+            #     if (val-self.CENTERS["RS_Y"] > self.THRESHOLD):
+            #         #print(f'RS Backward: {val}')
+            #         pass
+            #     if (val+self.CENTERS["RS_Y"] < self.THRESHOLD):
+            #         #print(f'RS Forward: {val}')
+            #         pass
+    # If there is more logic, add below
 
+    def getLS(self):
+        return self.ls_state
 
 #######################
 #### EVENT READING ####
