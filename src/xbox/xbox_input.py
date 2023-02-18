@@ -2,13 +2,19 @@ from evdev import list_devices, InputDevice, categorize, ecodes, KeyEvent
 import time
 import threading
 
-# CONSTANTS
+##### This class lets you read the controller by  #####
+##### letting input loop run in a separate thread #####
+# Global controllerState variable
+# Public functions: getLS(), setButtonCallback(buttonLetter, func), input_loop()
 
+# Todo: Right Stick, top buttons, get button down, simple directional checks?
 
 class ControllerState:
     THRESHOLD = 5000
+    # Default centers of sticks. To test values, disable the val=0 code for joysticks
     CENTERS = {"LS_Y": 1000, "LS_X": 2000, "RS_Y": 1000, "RS_X": 1000}
 
+    # Initialize controller and instance variables
     def __init__(self):
         self.devices = [InputDevice(path) for path in list_devices()]
         self.controller = None
@@ -37,6 +43,7 @@ class ControllerState:
     ## UPDATE FUNCTION ##
     #####################
 
+    # Allows external files to set a callback function for buttons to call
     def setButtonCallback_X(self, button, func):
         if button == 'x':
             self.callback_x = func
@@ -47,6 +54,7 @@ class ControllerState:
         elif button == 'a':
             self.callback_a = func
 
+    # Takes an event and updates instance variables and calls respective callbacks
     def update(self, event):
         keyevent = categorize(event)
         # UPDATE  BUTTONS
@@ -78,22 +86,19 @@ class ControllerState:
         elif (event.type == ecodes.EV_ABS):
             # print(str(keyevent) + " code: " + str(event.code))
             val = event.value
-            # Ensure it's above threshold
             
-            # NEED TO DOUBLE CHECK DIRECTIONS AND SIGN FLIPS
             # Left Stick X
             if (event.code == 0):
-                # Testing centers for actual code put this at end of this if
                 if (not(val-self.CENTERS["LS_X"] > self.THRESHOLD or val+self.CENTERS["LS_X"] < -self.THRESHOLD)):
                     val = 0
                 self.ls_state[0] = val
-            # Left Stick Y (Signs are backwards from intuition)
+            # Left Stick Y (Signs are naturally backwards from intuition, but is changed to be standard cartesian here)
             if (event.code == 1):
                 if (not(val-self.CENTERS["LS_Y"] > self.THRESHOLD or val+self.CENTERS["LS_Y"] < -self.THRESHOLD)):
                     val = 0
                 self.ls_state[1] = -val
 
-            # # Right Stick X
+            # # Right Stick X not implemented yet
             # if (event.code == 3):
             #     if (val-self.CENTERS["RS_X"] > self.THRESHOLD):
             #         #print(f'RS Right: {val}')
@@ -109,7 +114,7 @@ class ControllerState:
             #     if (val+self.CENTERS["RS_Y"] < self.THRESHOLD):
             #         #print(f'RS Forward: {val}')
             #         pass
-    # If there is more logic, add below
+    # If there is more logic, add below (i.e. set diagonal? set quadrant/octant status of sticks?)
 
     def getLS(self):
         return self.ls_state
@@ -117,9 +122,12 @@ class ControllerState:
 #######################
 #### EVENT READING ####
 #######################
+
+# Initialize controllerState
 controllerState = ControllerState()
 
-
+# Create global variable and enter event loop
+# - Must be run in separate thread
 def input_loop():
     global controllerState
     for event in controllerState.controller.read_loop():

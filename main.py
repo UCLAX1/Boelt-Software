@@ -38,32 +38,31 @@ def main():
     controllerState.setButtonCallback_X('y', y_test)
     controllerState.setButtonCallback_X('b', b_test)
     controllerState.setButtonCallback_X('a', a_test)
-    while True:
-        print(controllerState.getLS())
 
     # Main Loop
-    # while True:
-    #     # Loop to wait for a command
-    #     print("Waiting from command")
-    #     last_loop = time.time()
-    #     while True:
-    #         # Read command value from controller
-    #         if cond:
-    #             break
-    #         sleep(0.1)
-    #     # Command Loop
-    #     while True:
-    #         # Run gait controller, based on various inputs
-    #         # Read in controller command
-    #         now = time.time()
+    while True:
+        # Loop to wait for a command
+        print(controllerState.getLS()) # Print Left stick values
+        print("Waiting from command")
+        last_loop = time.time()
+        while True:
+            # Read command value from controller
+            if cond:
+                break
+            sleep(0.1)
+        # Command Loop
+        while True:
+            # Run gait controller, based on various inputs
+            # Read in controller command
+            now = time.time()
 
-    #         # Check to see if a full cycle time has passed
-    #         if now - last_loop < config.dt:
-    #             # if not, skip this iteration of the loop
-    #             continue
-    #         last_loop = time.time()
-    #         if cond:
-    #             break
+            # Check to see if a full cycle time has passed
+            if now - last_loop < config.dt:
+                # if not, skip this iteration of the loop
+                continue
+            last_loop = time.time()
+            if cond:
+                break
 
 
             
