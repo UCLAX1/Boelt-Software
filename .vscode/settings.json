@@ -1,0 +1,71 @@
+{
+    "jupyter.kernels.filter": [{
+            "path": "/Users/brian/.julia/conda/3/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/opt/anaconda3/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/Library/Jupyter/kernels/boelt/kernel.json",
+            "type": "jupyterKernelspec"
+        },
+        {
+            "path": "/Users/brian/opt/anaconda3/envs/fastai/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/.local/share/virtualenvs/herokuTest-Dx7uB38I/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/Library/Jupyter/kernels/julia-1.6/kernel.json",
+            "type": "jupyterKernelspec"
+        },
+        {
+            "path": "/Users/brian/Library/Jupyter/kernels/julia-nteract-1.7/kernel.json",
+            "type": "jupyterKernelspec"
+        },
+        {
+            "path": "/usr/local/bin/python3",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/opt/homebrew/bin/python3",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/opt/homebrew/bin/python3.11",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/usr/bin/python3",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/opt/homebrew/bin/python3.9",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/usr/local/bin/python3.9",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/.local/share/virtualenvs/ThermoTables-TDCzTVMQ/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/Library/Jupyter/kernels/venv/kernel.json",
+            "type": "jupyterKernelspec"
+        },
+        {
+            "path": "/Users/brian/Developer/boelt/venv/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/Users/brian/Developer/boelt/venv/bin/python3",
+            "type": "pythonEnvironment"
+        }
+    ]
+}
