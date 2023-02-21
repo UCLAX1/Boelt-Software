@@ -34,10 +34,10 @@ def a_test():
 def main():
     thread = threading.Thread(target=input_loop)
     thread.start()
-    controllerState.setButtonCallback_X('x', x_test)
-    controllerState.setButtonCallback_X('y', y_test)
-    controllerState.setButtonCallback_X('b', b_test)
-    controllerState.setButtonCallback_X('a', a_test)
+    controllerState.setButtonCallback('x', x_test)
+    controllerState.setButtonCallback('y', y_test)
+    controllerState.setButtonCallback('b', b_test)
+    controllerState.setButtonCallback('a', a_test)
 
     # Main Loop
     while True:

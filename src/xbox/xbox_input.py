@@ -44,7 +44,7 @@ class ControllerState:
     #####################
 
     # Allows external files to set a callback function for buttons to call
-    def setButtonCallback_X(self, button, func):
+    def setButtonCallback(self, button, func):
         if button == 'x':
             self.callback_x = func
         elif button == 'y':
@@ -53,6 +53,15 @@ class ControllerState:
             self.callback_b = func
         elif button == 'a':
             self.callback_a = func
+
+    def xDown(self):
+        return self.a_down 
+    def yDown(self):
+        return self.y_down 
+    def bDown(self):
+        return self.b_down 
+    def aDown(self):
+        return self.a_down 
 
     # Takes an event and updates instance variables and calls respective callbacks
     def update(self, event):
