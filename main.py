@@ -21,6 +21,9 @@ Here's how it works
 from time import sleep, time
 from src.xbox.xbox_input import input_loop, ControllerState, controllerState
 import threading
+import src.top_controller as TopController
+import src.State as State
+import config as Configuration
 
 def x_test():
     print("X pressed")
@@ -38,6 +41,16 @@ def main():
     controllerState.setButtonCallback('y', y_test)
     controllerState.setButtonCallback('b', b_test)
     controllerState.setButtonCallback('a', a_test)
+    
+    # Create top level controller
+    top_controller = TopController()
+
+    #Initializing state
+    state = State()
+
+    # Initializing configuration
+    config = Configuration()
+
 
     # Main Loop
     while True:
@@ -46,8 +59,8 @@ def main():
         print("Waiting from command")
         last_loop = time.time()
         while True:
-            # Read command value from controller
-            if cond:
+            if JoystickInterface.a_pressed():
+                print("A Pressed")
                 break
             sleep(0.1)
         # Command Loop
@@ -61,7 +74,7 @@ def main():
                 # if not, skip this iteration of the loop
                 continue
             last_loop = time.time()
-            if cond:
+            if JoystickInterface.a_pressed():
                 break
 
 
