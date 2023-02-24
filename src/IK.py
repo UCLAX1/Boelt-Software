@@ -1,19 +1,25 @@
 import math 
 import numpy as np
 
-def IK(links, px, py, pz, t1, off):
-    [t2, t3, t4] = IK_x(links, px, py, pz, t1+off["t1"])
+def IK(config, T, theta1, legIndex):
+    px = T(1,4)
+    py = T(2,4)
+    pz = T(3,4)
+
+    if legIndex <= 1:
+        py = py-config.center_to_spine
+    else:
+        py = py+config.center_to_spine
+
+    off = config.offsets(legIndex)
+    [t2, t3, t4] = IK_x(config, px, py, pz, theta1+off["t1"])
     q = np.array([t2-off["t2"], t3-off["t3"], t4])
     return q
 
 
-def IK_x(links, px, py, pz, t1):
-    L1 = links["L1"]
-    L3 = links["L3"]
-    L4 = links["L4"]
-    d2 = links["d2"]
-    d3 = links["d3"]
 
+def IK_x(links, px, py, pz, t1):
+    
     t2 = theta2(px, py, L1, d3, t1) 
     [t4,s4,c4] = theta4(px, py, pz, L1, L3, L4, d2, t1, t2)
     t3 = theta3(L3, L4, d2, pz, s4, c4)
