@@ -19,19 +19,29 @@ Here's how it works
 
 # imports
 from time import sleep, time
-import src.joystick_interface as JoystickInterface
+from src.xbox.xbox_input import input_loop, ControllerState, controllerState
+import threading
 import src.top_controller as TopController
 import src.State as State
 import config as Configuration
 
+def x_test():
+    print("X pressed")
+def y_test():
+    print("Y pressed")
+def b_test():
+    print("B pressed")
+def a_test():
+    print("A pressed")
 
 def main():
-
-    # Create a joystick event listener
-    print("Creating joystick interface")
-    joystick = JoystickInterface.ControllerState()
-    print("Joystick interface created")
-
+    thread = threading.Thread(target=input_loop)
+    thread.start()
+    controllerState.setButtonCallback('x', x_test)
+    controllerState.setButtonCallback('y', y_test)
+    controllerState.setButtonCallback('b', b_test)
+    controllerState.setButtonCallback('a', a_test)
+    
     # Create top level controller
     top_controller = TopController()
 
@@ -41,10 +51,12 @@ def main():
     # Initializing configuration
     config = Configuration()
 
+
     # Main Loop
     while True:
         # Loop to wait for a command
-        print("Waiting for command")
+        print(controllerState.getLS()) # Print Left stick values
+        print("Waiting from command")
         last_loop = time.time()
         while True:
             if JoystickInterface.a_pressed():
