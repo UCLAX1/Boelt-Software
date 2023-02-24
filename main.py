@@ -21,6 +21,9 @@ Here's how it works
 from time import sleep, time
 from src.xbox_input import input_loop, ControllerState, controllerState
 import threading
+import src.top_controller as TopController
+import src.State as State
+import config as Configuration
 from src.command import Command
 
 def x_test():
@@ -42,6 +45,16 @@ def main():
     controllerState.setButtonCallback('y', y_test)
     controllerState.setButtonCallback('b', b_test)
     controllerState.setButtonCallback('a', a_test)
+    
+    # Create top level controller
+    top_controller = TopController()
+
+    #Initializing state
+    state = State()
+
+    # Initializing configuration
+    config = Configuration()
+
 
     # MAIN LOOP #
     while True:
@@ -70,5 +83,6 @@ def main():
             if command.activate_event == 1:
                 break
         print("ROBOT DEACTIVATED")    
+
 
 main()
