@@ -19,16 +19,36 @@ Here's how it works
 
 # imports
 from time import sleep, time
+import src.joystick_interface as JoystickInterface
+import src.top_controller as TopController
+import src.State as State
+import config as Configuration
+
 
 def main():
+
+    # Create a joystick event listener
+    print("Creating joystick interface")
+    joystick = JoystickInterface.ControllerState()
+    print("Joystick interface created")
+
+    # Create top level controller
+    top_controller = TopController()
+
+    #Initializing state
+    state = State()
+
+    # Initializing configuration
+    config = Configuration()
+
     # Main Loop
     while True:
         # Loop to wait for a command
-        print("Waiting from command")
+        print("Waiting for command")
         last_loop = time.time()
         while True:
-            # Read command value from controller
-            if cond:
+            if JoystickInterface.a_pressed():
+                print("A Pressed")
                 break
             sleep(0.1)
         # Command Loop
@@ -42,7 +62,7 @@ def main():
                 # if not, skip this iteration of the loop
                 continue
             last_loop = time.time()
-            if cond:
+            if JoystickInterface.a_pressed():
                 break
 
 
