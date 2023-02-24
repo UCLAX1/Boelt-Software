@@ -19,8 +19,9 @@ Here's how it works
 
 # imports
 from time import sleep, time
-from src.xbox.xbox_input import input_loop, ControllerState, controllerState
+from src.xbox_input import input_loop, ControllerState, controllerState
 import threading
+from src.command import Command
 
 def x_test():
     print("X pressed")
@@ -31,6 +32,9 @@ def b_test():
 def a_test():
     print("A pressed")
 
+# Access to controller and command:
+# Controller: xDown(), getCommand(), setButtonCallback(), getLS()
+# Command: 
 def main():
     thread = threading.Thread(target=input_loop)
     thread.start()
@@ -39,17 +43,19 @@ def main():
     controllerState.setButtonCallback('b', b_test)
     controllerState.setButtonCallback('a', a_test)
 
-    # Main Loop
+    # MAIN LOOP #
     while True:
         # Loop to wait for a command
-        print(controllerState.getLS()) # Print Left stick values
-        print("Waiting from command")
+        # print(controllerState.getLS()) # Print Left stick values
+        print("Waiting for Button A to Activate robot")
         last_loop = time.time()
         while True:
             # Read command value from controller
-            if cond:
+            command = controllerState.getCommand()
+            if command.activate_event == 1:
                 break
             sleep(0.1)
+        print("ROBOT ACTIVATED")
         # Command Loop
         while True:
             # Run gait controller, based on various inputs
@@ -61,9 +67,8 @@ def main():
                 # if not, skip this iteration of the loop
                 continue
             last_loop = time.time()
-            if cond:
+            if command.activate_event == 1:
                 break
+        print("ROBOT DEACTIVATED")    
 
-
-            
 main()
