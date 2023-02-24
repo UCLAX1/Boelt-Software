@@ -3,7 +3,6 @@ from enum import Enum
 
 
 class State:
-
     def __init__(self):
         #Took these from pupper, will modify as I understand better
         self.horizontal_velocity = np.array([0.0, 0.0])

@@ -5,9 +5,7 @@ class SwingController:
     def __init__(self, config):
         self.config = config
 
-    def raibert_touchdown_location(
-        self, leg_index, command
-    ):
+    def raibert_touchdown_location(self, leg_index, command):
         delta_p_2d = (
             self.config.alpha
             * self.config.stance_ticks
