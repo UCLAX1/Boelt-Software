@@ -11,18 +11,20 @@ def IK(config, T, theta1, legIndex):
     else:
         py = py+config.center_to_spine
 
-    off = config.offsets(legIndex)
-    [t2, t3, t4] = IK_x(config, px, py, pz, theta1+off["t1"])
-    q = np.array([t2-off["t2"], t3-off["t3"], t4])
+    off = config.offset(legIndex)
+    link = config.link(legIndex)
+    [t2, t3, t4] = IK_x(config, px, py, pz, theta1)
+    q = np.array([theta1-off[1,1], t2-off[1,2], t3-off[1,2], t4])
     return q
 
 
 
+
+
 def IK_x(links, px, py, pz, t1):
-    
-    t2 = theta2(px, py, L1, d3, t1) 
-    [t4,s4,c4] = theta4(px, py, pz, L1, L3, L4, d2, t1, t2)
-    t3 = theta3(L3, L4, d2, pz, s4, c4)
+    t2 = theta2(px, py, links.L1, links.d3, t1) 
+    [t4,s4,c4] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2)
+    t3 = theta3(links.L3, links.L4, links.d2, pz, s4, c4)
     return [t2, t3, t4]
 
 def theta2(px, py, L1, d3, t1):
