@@ -3,7 +3,7 @@ import numpy as np
 
 
 class Link:
-    def _init_(self, L1, d3): 
+    def __init__(self, L1, d3): 
         # Spine to shoulder distance
         self.L1 = L1
         # Shoulder to knee distance
@@ -17,8 +17,7 @@ class Link:
 
 
 class Configuration:
-    def _init_(self):
-       
+    def __init__(self):
         ######################## GEOMETRY ######################
         
         # Shoulder motor axis to center of leg
@@ -33,8 +32,8 @@ class Configuration:
         self._x2 = 76.454E-3
         self._y2 = 107.188E-3
 
-        self._L1_rear = math.sqrt(self.x2**2 + self.y2**2)
-        self._L1_front = math.sqrt(self.x1**2 + self.y1**2)
+        self._L1_rear = math.sqrt(self._x2**2 + self._y2**2)
+        self._L1_front = math.sqrt(self._x1**2 + self._y1**2)
 
         ################### LINKS ###################
         self._fr = Link(self._L1_front, self._d3_right)
@@ -45,7 +44,7 @@ class Configuration:
         ################### Offsets ###################       
         self._t1 = math.atan2(self._x1,self._y1)
         self._t2 = math.atan2(self._x2,self._y2)
-        self._off_fr = np.array([self._t1, math.pi/2-self._t1, math.pi/2])
+        self._off_fr = np.array([self._t1, math.pi/2-self._t1, -math.pi/2])
         self._off_fl = np.array([math.pi-self._t1, self._t1-math.pi/2, -math.pi/2])
         self._off_bl = np.array([self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2])
         self._off_br = np.array([-self._t2, self._t2+math.pi/2, -math.pi/2])

@@ -1,20 +1,22 @@
 import math 
 import numpy as np
 
-def IK(config, T, theta1, legIndex):
-    px = T(1,4)
-    py = T(2,4)
-    pz = T(3,4)
 
-    if legIndex <= 1:
-        py = py-config.center_to_spine
-    else:
-        py = py+config.center_to_spine
+def IK(config, T, theta1, legIndex):
+    px = T[0,3]
+    py = T[1,3]
+    pz = T[2,3]
+    
+
+    # if legIndex <= 1:
+    #     py = py-config.center_to_spine
+    # else:
+    #     py = py+config.center_to_spine
 
     off = config.offset(legIndex)
     link = config.link(legIndex)
-    [t2, t3, t4] = IK_x(config, px, py, pz, theta1)
-    q = np.array([theta1-off[1,1], t2-off[1,2], t3-off[1,2], t4])
+    [t2, t3, t4] = IK_x(link, px, py, pz, theta1)
+    q = np.array([theta1-off[0], t2-off[1], t3-off[2], t4])
     return q
 
 
