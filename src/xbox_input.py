@@ -1,6 +1,8 @@
 from evdev import list_devices, InputDevice, categorize, ecodes, KeyEvent
+import numpy as np
 import time
 import threading
+from command import Command
 
 ##### This class lets you read the controller by  #####
 ##### letting input loop run in a separate thread #####
@@ -26,8 +28,8 @@ class ControllerState:
                 self.controller = device
         self.joysticks = {"ls_x": 0, "ls_y": 0, "rs_x": 0, "rs_y": 0}
 
-        self.ls_state = [0,0]
-        self.rs_state = [0,0]
+        self.ls_state = np.array([0,0])
+        self.rs_state = np.array([0,0])
 
         self.callback_x = None
         self.callback_y = None
@@ -39,9 +41,15 @@ class ControllerState:
         self.b_down = False
         self.a_down = False
 
-    #####################
-    ## UPDATE FUNCTION ##
-    #####################
+    def getCommand(self):
+            command = Command()
+            if(self.aDown()):
+                    command.activate_event = True
+
+
+            return command
+
+    
 
     # Allows external files to set a callback function for buttons to call
     def setButtonCallback(self, button, func):
@@ -62,7 +70,11 @@ class ControllerState:
         return self.b_down 
     def aDown(self):
         return self.a_down 
+    
 
+    #####################
+    ## UPDATE FUNCTION ##
+    #####################
     # Takes an event and updates instance variables and calls respective callbacks
     def update(self, event):
         keyevent = categorize(event)
@@ -141,8 +153,5 @@ def input_loop():
     global controllerState
     for event in controllerState.controller.read_loop():
         controllerState.update(event)
-
-
-# In the file where you want to use xbox_input:
 
 
