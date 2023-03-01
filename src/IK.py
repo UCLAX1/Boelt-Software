@@ -1,22 +1,32 @@
 import math 
 import numpy as np
 
-def IK(links, px, py, pz, t1, off):
-    [t2, t3, t4] = IK_x(links, px, py, pz, t1+off["t1"])
-    q = np.array([t2-off["t2"], t3-off["t3"], t4])
+
+def IK(config, T, theta1, legIndex):
+    px = T[0,3]
+    py = T[1,3]
+    pz = T[2,3]
+    
+
+    # if legIndex <= 1:
+    #     py = py-config.center_to_spine
+    # else:
+    #     py = py+config.center_to_spine
+
+    off = config.offset(legIndex)
+    link = config.link(legIndex)
+    [t2, t3, t4] = IK_x(link, px, py, pz, theta1)
+    q = np.array([theta1-off[0], t2-off[1], t3-off[2], t4])
     return q
 
 
-def IK_x(links, px, py, pz, t1):
-    L1 = links["L1"]
-    L3 = links["L3"]
-    L4 = links["L4"]
-    d2 = links["d2"]
-    d3 = links["d3"]
 
-    t2 = theta2(px, py, L1, d3, t1) 
-    [t4,s4,c4] = theta4(px, py, pz, L1, L3, L4, d2, t1, t2)
-    t3 = theta3(L3, L4, d2, pz, s4, c4)
+
+
+def IK_x(links, px, py, pz, t1):
+    t2 = theta2(px, py, links.L1, links.d3, t1) 
+    [t4,s4,c4] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2)
+    t3 = theta3(links.L3, links.L4, links.d2, pz, s4, c4)
     return [t2, t3, t4]
 
 def theta2(px, py, L1, d3, t1):
