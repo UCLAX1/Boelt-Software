@@ -4,14 +4,12 @@
 #include "Arduino.h"
 #include <Servo.h>
 
-class Leg 
+class Leg
 {
   public:
-    int servoIndex[3];
+    Leg(Servo m1, Servo m2, Servo m3, int off1, int off2, int off3);
     int legOffset[3];
-    Servo motor1;
-    Servo motor2;
-    Servo motor3;
+    Servo servos[3];
     void move( int pos[3] );
     
     

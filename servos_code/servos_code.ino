@@ -1,6 +1,7 @@
 // modified: 2/17 by Emily Liang
 
 #include <Servo.h> 
+#include "leg.h"
 
 Servo legFL;
 Servo legFR;
@@ -25,8 +26,6 @@ int input;
 int off1 = 50;
 int off2 = 115;
 int off3 = 120;
-
-
 
 int pos = 70; 
  
@@ -53,6 +52,10 @@ void setup()
   servos[0].write(off1);   
   servos[1].write(off2 + 85.664);
   servos[2].write(off3-22.5);
+
+  Leg legFR(hipFR, hiplegFR, legFR, 0, 0, 0);
+  legFR.move(90, 90, 90);
+  
 
 } 
  
