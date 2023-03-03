@@ -15,8 +15,8 @@ def IK(config, T, theta1, legIndex):
 
     off = config.offset(legIndex)
     link = config.link(legIndex)
-    [t2, t3, t4] = IK_x(link, px, py, pz, theta1)
-    q = np.array([theta1-off[0], t2-off[1], t3-off[2], t4])
+    [t2, t3, t4] = IK_x(link, px, py, pz, theta1-off[0])
+    q = np.array([theta1, t2-off[1], t3-off[2], t4])
     return q
 
 
