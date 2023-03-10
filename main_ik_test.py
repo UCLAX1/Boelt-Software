@@ -1,14 +1,14 @@
 
 # imports
 from time import sleep, time
-from src.xbox_input import input_loop, ControllerState, controllerState
+#from src.xbox_input import input_loop, ControllerState, controllerState
 import threading
-import src.top_controller as TopController
+#import src.top_controller as TopController
 import src.State as State
-import config as Configuration
+from src.Config import Configuration
 from src.command import Command
 import numpy as np
-import IK
+from src.IK import IK
 
 
 # Access to controller and command:
