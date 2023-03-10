@@ -24,9 +24,16 @@ def IK(config, T, theta1, legIndex):
 
 
 def IK_x(links, px, py, pz, t1):
-    t2 = theta2(px, py, links.L1, links.d3, t1) 
+    try:
+        t2 = theta2(px, py, links.L1, links.d3, t1) 
+    except:
+        print("Angle t2 failed")
     [t4,s4,c4] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2)
-    t3 = theta3(links.L3, links.L4, links.d2, pz, s4, c4)
+
+    try:
+        t3 = theta3(links.L3, links.L4, links.d2, pz, s4, c4)
+    except:
+        print("Angle t3 failed")
     return [t2, t3, t4]
 
 def theta2(px, py, L1, d3, t1):
