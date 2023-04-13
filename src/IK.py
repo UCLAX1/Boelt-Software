@@ -1,13 +1,11 @@
 import math 
 import numpy as np
 
+from Config import Configuration
 
-def IK(config, T, theta1, legIndex):
-    px = T[0,3]
-    py = T[1,3]
-    pz = T[2,3]
-    
+config = Configuration()
 
+def IK(px, py, pz, theta1, config, legIndex):
     # if legIndex <= 1:
     #     py = py-config.center_to_spine
     # else:
@@ -15,7 +13,8 @@ def IK(config, T, theta1, legIndex):
 
     off = config.offset(legIndex)
     link = config.link(legIndex)
-    [t2, t3, t4] = IK_x(link, px, py, pz, theta1-off[0])
+    [t2, t3, t4] = IK_x(link, px, py, pz, theta1+off[0])
+    print(f"t2: {wrapToPi(t2)}, t3: {wrapToPi(t3)}, t4: {wrapToPi(t4)}")
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
     return q
 
@@ -24,21 +23,42 @@ def IK(config, T, theta1, legIndex):
 
 
 def IK_x(links, px, py, pz, t1):
-    t2 = theta2(px, py, links.L1, links.d3, t1) 
-    [t4,s4,c4] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2)
-    t3 = theta3(links.L3, links.L4, links.d2, pz, s4, c4)
-    return [t2, t3, t4]
+    t2_1 = theta2(px, py, links.L1, links.d3, t1, 0) 
+    t2_2 = theta2(px, py, links.L1, links.d3, t1, 1) 
+    t2s = [t2_1, t2_2]
+    foo = abs(np.array(list(map(wrapToPi,t2s))) - 0.9153)
+    I = np.argmin(foo)
+    print(f"I: {I}")
+    t2 = t2s[I]
+    print(f"t2s: {t2s}")
 
-def theta2(px, py, L1, d3, t1):
+
+    [t4_1,s4_1,c4_1] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2_1)
+    [t4_2,s4_2,c4_2] = theta4(px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2_2)
+    t4s = [t4_1, t4_2]
+    print(f"t4s: {t4s}")
+    t4 = t4s[I]
+
+    t3_1 = theta3(links.L3, links.L4, links.d2, pz, s4_1, c4_1, 1)
+    t3_2 = theta3(links.L3, links.L4, links.d2, pz, s4_1, c4_1, 0)
+    t3s = [t3_1, t3_2]
+    print(f"t3s: {t3s}")
+
+    t3 = t3s[I]
+    q = [t2, t3, t4]
+    sol = list(map(wrapToPi, q))
+    return q
+
+def theta2(px, py, L1, d3, t1, solNum):
     a = -px*math.sin(t1) + py*math.cos(t1)
     b = L1 - px*math.cos(t1) - py*math.sin(t1)
     c = -d3
 
     g = a**2 + b**2 - c**2
-    print(f"A: {a}, B: {b}, C: {c}")
 
     if (g > 0):
-        t2 = math.atan2(-math.sqrt(g), c) + math.atan2(b, a)
+        t2s = [math.atan2(math.sqrt(g), c) + math.atan2(b, a), math.atan2(-math.sqrt(g), c) + math.atan2(b, a)]
+        t2 = t2s[solNum]
         return t2
         # t2_2 = atan2(-sqrt(g), c) + atan2(b, a)
     elif (g == 0):
@@ -54,6 +74,7 @@ def theta4(px, py, pz, L1, L3, L4, d2, t1, t2):
     b = -L3**2 - L4**2 + d2**2 - 2*d2*pz + px**2*math.cos(t1+t2)**2
     c = px*py*math.sin(2*t1 + 2*t2) + py**2*math.sin(t1+t2)**2 + pz**2
 
+    print(f"b:{b}")
     c4 = (a+b+c)/(2*L3*L4)
 
     s4 = math.sqrt(1-c4**2)
@@ -62,7 +83,7 @@ def theta4(px, py, pz, L1, L3, L4, d2, t1, t2):
     return [t4,s4,c4]
 
 
-def theta3(L3, L4, d2, pz, s4, c4):
+def theta3(L3, L4, d2, pz, s4, c4, solNum):
     a = L4*s4
     b = L3 + L4*c4
     c = pz - d2
@@ -70,7 +91,8 @@ def theta3(L3, L4, d2, pz, s4, c4):
     g = a**2 + b**2 - c**2
 
     if (g > 0):
-        t3 = math.atan2(math.sqrt(g), c) + math.atan2(b, a)
+        t3s = [math.atan2(math.sqrt(g), c) + math.atan2(b, a), math.atan2(-math.sqrt(g), c) + math.atan2(b, a)]
+        t3 = t3s[solNum]
         # t3_2 = atan2(-sqrt(g), c) + atan2(b, a)
     elif (g == 0):
         t3 = math.atan2(math.sqrt(g), c) + math.atan2(b, a)
@@ -78,3 +100,19 @@ def theta3(L3, L4, d2, pz, s4, c4):
         print("There is no solution for this configuration")
     return t3
     
+def wrapToPi(x):
+    if not (-math.pi < x < math.pi):
+        x = wrapTo2Pi(x+math.pi)-math.pi
+    return x
+
+
+def wrapTo2Pi(x):
+    isPositive = (x>0)
+    x = x%(2*math.pi)
+    if x == 0 & isPositive:
+        x = 2*math.pi
+    return x
+    
+
+ans = IK(0.1714, -0.03, -0.1883,0, config, 0)
+print(ans)
