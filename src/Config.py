@@ -9,7 +9,7 @@ class Link:
         # Shoulder to knee distance
         self.L3 = 99.116E-3
         # Knee to ground distance
-        self.L4 = 104.00E-3
+        self.L4 = 104E-3
          # Spine top plane to shoulder
         self.d2 = -31.75E-3
         # Shoulder motor axis to center of leg
