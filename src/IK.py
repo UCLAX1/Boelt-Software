@@ -1,7 +1,7 @@
 import math 
 import numpy as np
 
-from Config import Configuration
+from src.Config import Configuration
 
 config = Configuration()
 
@@ -114,5 +114,4 @@ def wrapTo2Pi(x):
     return x
     
 
-ans = IK(0.1714, -0.03, -0.1883,0, config, 0)
-print(ans)
+
