@@ -49,6 +49,18 @@ class Configuration:
         self._off_bl = np.array([self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2])
         self._off_br = np.array([-self._t2, self._t2+math.pi/2, -math.pi/2])
 
+        #################### GAIT #######################
+        self.dt = 0.01
+        self.num_phases = 4
+        self.contact_phases = np.array(
+            [[1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 1], [1, 1, 1, 0]]
+        )
+        self.overlap_time = (
+            0.10  # duration of the phase where all four feet are on the ground
+        )
+        self.swing_time = (
+            0.15  # duration of the phase when only two feet are on the ground
+
     def offset(self, legIndex):
         match legIndex:
             case 0:
