@@ -7,18 +7,21 @@ class GaitScheduler:
     
     def whichFeetOnGround(self, state):
         if(state == 0 or state == -1): #Rest or Deactivated
-            self.nextStance = np.array([1,1,1,1])
-            self.prevStance = np.array([1,1,1,1])
+            self.currentStance = np.array([1,1,1,1])
         elif(state == 1): #Walk -> pi/2 between each state
-            if(self.prevStance == np.array([1,0,1,1])): 
-                self.nextStance = np.array([1,1,1,0])
-                self.prevStance = np.array([1,1,1,0])
-            elif(self.prevStance == np.array([1,1,1,0])):
-                self.nextStance = np.array([0,1,1,1])
-                self.prevStance = np.array([0,1,1,1])
-            elif(self.prevStance == np.array([0,1,1,1])):
-                self.nextStance = np.array([1,1,0,1])
-                self.prevStance = np.array([1,1,0,1])
+            if(self.currentStance == self.contact_phases[0]): 
+                self.currentStance = self.contact_phases[1]
+            elif(self.currentStance == self.contact_phases[1]):
+                self.currentStance = self.contact_phases[2]
+            elif(self.currentStance == self.contact_phases[2]):
+                self.currentStance = self.contact_phases[3]
+            if(self.currentStance == self.contact_phases[3]): 
+                self.currentStance = self.contact_phases[4]
+            elif(self.currentStance == self.contact_phases[4]):
+                self.currentStance = self.contact_phases[5]
+            elif(self.currentStance == self.contact_phases[5]):
+                self.currentStance = self.contact_phases[6]
+            if(self.currentStance == self.contact_phases[6]): 
+                self.currentStance = self.contact_phases[7]
             else:
-                self.nextStance = np.array([1,0,1,1])
-                self.prevStance = np.array([1,0,1,1])
+                self.currentStance = self.contact_phases[0]
