@@ -1,6 +1,7 @@
 #include <Servo.h>
 #include "leg.h"
 
+// servos array
 Servo legFL;
 Servo legFR;
 Servo legBL;
@@ -16,11 +17,46 @@ Servo hipBR;
 Servo spineF;
 Servo spineB;
 
-Servo servos[] = {legFL, legFR, legBL, legBR, hiplegFL, hiplegFR, hiplegBL, hiplegBR, hipFL, hipFR, hipBL, hipBR, spineF, spineB};
-// int servos_size = sizeof(servos)/sizeof(servos[0]);
+Servo servos[] = {legFL, hiplegFL, hipFL, legFR, hiplegFR, hipFR, legBL, hiplegBL, hipBL, legBR, hiplegBR, hipBR, spineF, spineB};
 int servos_size = 14;
-int servo_pins[] = {0, 6, 0, 0, 0, 8, 0, 0, 0, 7, 0, 0, 0, 0};
-int default_pos[] = {0, 85, 0, 0, 0, 100, 0, 0, 0, 115, 0, 0, 0, 0};
+
+// servo pins
+/*
+index name pin #
+0 legFL pin 5
+1 hiplegFL pin 4
+2 hipFL pin 3
+3 leg FR pin 6
+4 hiplegFR pin 8
+5 hip FR pin 7
+6 legBL pin 12
+7 hiplegBL pin 25
+8 hipBL pin 24
+9 legBR pin 36
+10 hiplegBR pin 29
+11 hipBR pin 28
+12 spineF pin 9
+13 spineB pin 37
+*/
+// trying swap of pins and default for 7 and 8
+int servo_pins[] = {5, 4, 3, 6, 8, 7, 12, 24, 25, 36, 29, 28, 9, 37};
+
+// servo default positions (offsets)
+int default_pos[] = {90, 140, 145, 85, 100, 115, 117, 155, 170, 65, 120, 80, 80, 100};
+
+// initialize legs
+//  Hip, hipleg, leg
+Leg LegFL(&servos[2], &servos[1], &servos[0], default_pos[2], default_pos[1], default_pos[0]);
+Leg LegFR(&servos[5], &servos[4], &servos[3], default_pos[5], default_pos[4], default_pos[3]);
+Leg LegBL(&servos[8], &servos[7], &servos[6], default_pos[8], default_pos[7], default_pos[6]);
+Leg LegBR(&servos[11], &servos[10], &servos[9], default_pos[11], default_pos[10], default_pos[9]);
+
+float zeroes[] = {0.0, 0.0, 0.0};
+
+// initialize spine?
+int spineF_pos = default_pos[12];
+int spineB_pos = default_pos[13];
+
 /*
 pin 2
 pin 3
@@ -36,8 +72,6 @@ int off1 = 85;  // leg FR
 int off2 = 100; // leghip FR
 int off3 = 115; // hip FR
 float data[4] = {0.0, 0.0, 0.0, 0.0};
-
-Leg LegFR(&servos[9], &servos[5], &servos[1], 115, 100, 85);
 
 void setup()
 {
@@ -91,9 +125,13 @@ void loop()
 
     Serial.print("Data 3: ");
     Serial.println(data[3]);
-    float angles[] = {data[1], data[2], -data[3]};
-    LegFR.move(angles);
+    float angles1[] = {data[1], data[2], -data[3]};
+    // float angles2[] = {data[1], data[2], -data[3]};
+    LegFR.move(angles1);
+    LegFL.move(zeroes);
+    LegBL.move(zeroes);
+    LegBR.move(zeroes);
     // servos[9].write(input);
 
-    delay(150);
+    delay(75);
 }

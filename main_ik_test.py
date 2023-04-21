@@ -14,6 +14,8 @@ import struct
 from ctypes import c_float
 from math import degrees
 
+# Matlab notes: bl.fkine([0 0 0 0 0]) to get three possible positions in the top left of the mostly empty ans matrix (the bottom one)
+
 # Access to controller and command:
 # Controller: xDown(), getCommand(), setButtonCallback(), getLS()
 # Command: 
@@ -21,11 +23,22 @@ def main():
     # Initializing configuration
     config = Configuration()
 
+    
+
+    # FR Pos
     back = -0.02
     front = 0.15
     pos1 = 0.1714
     pos2 = front
     pos3 = -0.1883
+
+    # BL Pos
+    # back = -0.05
+    # front = -0.07657
+    # pos1 = -0.1
+    # pos2 = -0.07
+    # pos3 = -0.2
+
     speed = 0.01
     # MAIN LOOP #
     while True:
