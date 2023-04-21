@@ -10,7 +10,23 @@ class GaitScheduler:
         if(state == 0 or state == -1):
             self.nextStance = [1,1,1,1]
         elif(state == 1):
-            if(self.prevStance == [0,1,0,1]):
+            if(self.prevStance == [1,1,0,1]):
+                self.nextStance = [1,0,0,1]
+                self.prevStance = [1,0,0,1]
+            elif(self.prevStance == [1,0,0,1]):
+                self.nextStance = [1,0,1,1]
+                self.prevStance = [1,0,1,1]
+            elif(self.prevStance == [1,0,1,1]):
                 self.nextStance = [1,0,1,0]
-            else:
+                self.prevStance = [1,0,1,0]
+            elif(self.prevStance == [1,0,1,0]):
+                self.nextStance = [0,1,1,0]
+                self.prevStance = [0,1,1,0]
+            elif(self.prevStance == [0,1,1,0]):
+                self.nextStance = [0,1,1,1]
+                self.prevStance = [0,1,1,1]
+            elif(self.prevStance == [0,1,1,1]):
                 self.nextStance = [0,1,0,1]
+                self.prevStance = [0,1,0,1]
+            else:
+                self.nextStance = [1,1,0,1]
