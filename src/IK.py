@@ -15,7 +15,8 @@ def IK(px, py, pz, theta1, config, legIndex):
     link = config.link(legIndex)
     [t2, t3, t4] = IK_x(link, px, py, pz, theta1+off[0])
     print(f"t2: {wrapToPi(t2)}, t3: {wrapToPi(t3)}, t4: {wrapToPi(t4)}")
-    q = np.array([theta1, t2-off[1], t3-off[2], t4])
+    # REMOVED -off[1] and -off[2] from t2 and t3 respectively, and changed the return value to match the print
+    q = np.array([theta1, wrapToPi(t2), wrapToPi(t3), wrapToPi(t4)])
     return q
 
 
@@ -112,6 +113,3 @@ def wrapTo2Pi(x):
     if x == 0 & isPositive:
         x = 2*math.pi
     return x
-    
-
-

@@ -22,7 +22,7 @@ def main():
     config = Configuration()
 
     pos1 = 0.1714
-    pos2 = 0.1
+    pos2 = -0.03
     pos3 = -0.1883
     # MAIN LOOP #
     while True:
@@ -41,8 +41,11 @@ def main():
 
             #ans = IK(0.1714, 0.05, -0.1883, 0, config, 0)
             ans = IK(pos1, pos2, pos3, 0, config, 0)
+            print('\nIK Input: ' + str(pos1) + ', ' + str(pos2) + ', ' + str(pos3))
+            print('Radians IK output: ' + str(ans))
             c_ans = list(map(c_float,list(map(degrees,ans))))
-            print(c_ans)
+            
+            print('Degrees: ' + str(c_ans))
             print(type(c_ans[1]))
 
 
