@@ -91,7 +91,7 @@ void loop()
 
     Serial.print("Data 3: ");
     Serial.println(data[3]);
-    float angles[] = {data[1], data[2], data[3]};
+    float angles[] = {data[1], data[2], -data[3]};
     LegFR.move(angles);
     // servos[9].write(input);
 

@@ -21,9 +21,12 @@ def main():
     # Initializing configuration
     config = Configuration()
 
+    back = -0.02
+    front = 0.15
     pos1 = 0.1714
-    pos2 = -0.03
+    pos2 = front
     pos3 = -0.1883
+    speed = 0.01
     # MAIN LOOP #
     while True:
         # Loop to wait for a command
@@ -49,10 +52,7 @@ def main():
             print(type(c_ans[1]))
 
 
-            junk = input('Continue')
-            pos2+= 0.01
-            if pos2>0.2:
-                pos2=0
+            
             # Send out ik anlges to arduino #
 
             ser = Serial('/dev/cu.usbmodem131488301', 9600, timeout=1)
@@ -61,6 +61,11 @@ def main():
             # Send the packed data over serial
             ser.write(packed_data)
             print('sent data')
+
+            junk = input('Continue')
+            pos2-= speed
+            if pos2<back or pos2 > front:
+                speed = -speed
 
 
 
