@@ -1,6 +1,6 @@
 import math
 import numpy as np
-
+from src.forward_kinematics import forwardKinematics
 
 class Link:
     def __init__(self, L1, d3): 
@@ -44,10 +44,10 @@ class Configuration:
         ################### Offsets ###################       
         self._t1 = math.atan2(self._x1,self._y1)
         self._t2 = math.atan2(self._x2,self._y2)
-        self._off_fr = np.array([self._t1, math.pi/2-self._t1, -math.pi/2])
-        self._off_fl = np.array([math.pi-self._t1, self._t1-math.pi/2, -math.pi/2])
-        self._off_bl = np.array([self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2])
-        self._off_br = np.array([-self._t2, self._t2+math.pi/2, -math.pi/2])
+        self._off_fr = np.array([self._t1, math.pi/2-self._t1, -math.pi/2, 0])
+        self._off_fl = np.array([math.pi-self._t1, self._t1-math.pi/2, -math.pi/2, 0])
+        self._off_bl = np.array([self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2, 0])
+        self._off_br = np.array([-self._t2, self._t2+math.pi/2, -math.pi/2, 0])
 
         #################### GAIT #######################
         self.dt = 0.01
@@ -55,11 +55,9 @@ class Configuration:
         self.contact_phases = np.array(
             [[1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 1], [1, 1, 1, 0]]
         )
-        self.overlap_time = (
-            0.10  # duration of the phase where all four feet are on the ground
-        )
-        self.swing_time = (
-            0.15  # duration of the phase when only two feet are on the ground
+        self.overlap_time = 0.10  # duration of the phase where all four feet are on the ground
+        self.swing_time = 0.15  # duration of the phase when only two feet are on the ground
+    
 
     def offset(self, legIndex):
         match legIndex:
@@ -83,7 +81,29 @@ class Configuration:
             case 3:
                 return self._br
             
+    def getDH(self, leg_index):
+        links = self.link(leg_index)
+        DH = dict()
+        DH["alpha"] = np.array([0, 0, np.pi/2, 0, 0])
+        DH["a"] = np.array([0, links.L1, 0, links.L3, links.L4])
+        DH["d"] = np.array([0, links.d2, links.d3, 0, 0])
+        return DH
+
+    def convertAngles(self, joints, leg_index):
+        return joints+self.offset(leg_index)
         
+
+    def fKine(self, joints, leg_index): 
+        DH = self.getDH(leg_index)
+        q = self.convertAngles(joints, leg_index)
+        T = forwardKinematics(a=DH["a"], d=DH["d"], alpha=DH["alpha"], theta=q)
+        pos = T[0:3, 3]
+        return pos
+
+    def homePos(self, leg_index):
+        ans = self.fKine(np.zeros(4), leg_index)
+        return ans
+
 
 
 
