@@ -40,16 +40,14 @@ index name pin #
 */
 // trying swap of pins and default for 7 and 8
 int servo_pins[] = {5, 4, 3, 6, 8, 7, 12, 24, 25, 36, 29, 28, 9, 37};
-
 // servo default positions (offsets)
-int default_pos[] = {90, 140, 145, 85, 100, 115, 117, 155, 170, 65, 120, 80, 80, 100};
-
+int default_pos[] = {121, 142, 130, 86, 100, 120, 120, 155, 60, 110, 115, 80, 80, 100};
 // initialize legs
-//  Hip, hipleg, leg
-Leg LegFL(&servos[2], &servos[1], &servos[0], default_pos[2], default_pos[1], default_pos[0]);
-Leg LegFR(&servos[5], &servos[4], &servos[3], default_pos[5], default_pos[4], default_pos[3]);
-Leg LegBL(&servos[8], &servos[7], &servos[6], default_pos[8], default_pos[7], default_pos[6]);
-Leg LegBR(&servos[11], &servos[10], &servos[9], default_pos[11], default_pos[10], default_pos[9]);
+Leg LegFL(&servos[0], &servos[1], &servos[2], default_pos[0], default_pos[1], default_pos[2]);
+Leg LegFR(&servos[3], &servos[4], &servos[5], default_pos[3], default_pos[4], default_pos[5]);
+Leg LegBL(&servos[6], &servos[7], &servos[8], default_pos[6], default_pos[7], default_pos[8]);
+Leg LegBR(&servos[9], &servos[10], &servos[11], default_pos[9], default_pos[10], default_pos[11]);
+;
 
 float zeroes[] = {0.0, 0.0, 0.0};
 
@@ -79,6 +77,8 @@ void setup()
     {
         servos[i].write(default_pos[i]);
         servos[i].attach(servo_pins[i]);
+        servos[i].write(default_pos[i]);
+
         delay(15);
     }
 
@@ -123,14 +123,20 @@ void loop()
         Serial.println(data[3]);
     }
 
+    Serial.print("Data 1: ");
+    Serial.println(data[1]);
+    Serial.print("Data 2: ");
+    Serial.println(data[2]);
     Serial.print("Data 3: ");
     Serial.println(data[3]);
-    float angles1[] = {data[1], data[2], -data[3]};
+    float angles2[] = {-data[3], data[2], data[1]};
+    float angles3[] = {data[3], -data[2], -data[1]};
+
     // float angles2[] = {data[1], data[2], -data[3]};
-    LegFR.move(angles1);
+    LegFR.move(angles2);
     LegFL.move(zeroes);
     LegBL.move(zeroes);
-    LegBR.move(zeroes);
+    LegBR.move(angles2);
     // servos[9].write(input);
 
     delay(75);

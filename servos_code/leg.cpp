@@ -16,14 +16,12 @@ void Leg::move(float pos[3])
   for (int i = 0; i < 3; i++)
   {
     int angle = offset[i] + pos[i];
-    if (angle < -180)
-    {
-      angle += 360;
-    }
-    if (angle > 180)
-    {
-      angle -= 360;
-    }
+    //    if (angle < -180) {
+    //      angle +=360;
+    //    }
+    //    if(angle > 180) {
+    //      angle-=360;
+    //    }
     servos[i]->write(angle);
     Serial.println(angle);
   }
