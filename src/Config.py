@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from src.forward_kinematics import forwardKinematics
+from src.IK import IK
 
 
 class Link:
@@ -61,6 +62,12 @@ class Configuration:
         self.overlap_time = 0.10  # duration of the phase where all four feet are on the ground
         self.swing_time = 0.15  # duration of the phase when only two feet are on the ground
 
+        #################### DEFAULT STANCE #######################
+        self.default_z = -0.1883
+        self.x_range = np.array([-0.07, 0.07])
+        self.y_range = np.array([-0.07, 0.07])
+        self.z_height = 0.05
+
     def offset(self, legIndex):
         match legIndex:
             case 0:
@@ -94,13 +101,16 @@ class Configuration:
     def convertAngles(self, joints, leg_index):
         return joints+self.offset(leg_index)
 
-    def fKine(self, joints, leg_index):
+    def fkine(self, joints, leg_index):
         DH = self.getDH(leg_index)
         q = self.convertAngles(joints, leg_index)
-        T = forwardKinematics(a=DH["a"], d=DH["d"], alpha=DH["alpha"], theta=q)
+        q2 = np.append(q, 0)
+        T = forwardKinematics(
+            a=DH["a"], alpha=DH["alpha"], d=DH["d"], theta=q2)
         pos = T[0:3, 3]
         return pos
 
     def homePos(self, leg_index):
-        ans = self.fKine(np.zeros(4), leg_index)
+        ans = self.fkine(np.zeros(4), leg_index)
+        ans[2] = self.default_z
         return ans
