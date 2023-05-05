@@ -1,6 +1,3 @@
-#PSEUDOCODE for walking
-
-
 #Phase 1:
 #
 #   leg 4:
@@ -19,7 +16,18 @@
 #    leg 1
 #    forward by one workspace length
 
+import move_foot as mf
+from Config import Configuration
+
+
+config = Configuration()
+
 def leg_forward(leg, distance):
+    for i in range(0.0, distance + 0.01, 0.01):
+        if(i <= distance / 2):
+            mf.moveFoot(config, leg, i, i, i)
+        else:
+            mf.moveFoot(config, leg, i, 1.0-i, i)
     print(f"Leg {leg}: Forward by {distance} workspace length")
 
 def body_motion(distance):
