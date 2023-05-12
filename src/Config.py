@@ -57,8 +57,9 @@ class Configuration:
         self.dt = 0.01
         self.num_phases = 4
         self.contact_phases = np.array(
-            [[1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 1], [1, 1, 1, 0]]
+            [[1, 0, 1, 1], [1, 1, 1, 1], [1, 1, 1, 0] , [1, 1, 1, 1], [0, 1, 1, 1], [1, 1, 1, 1], [1, 1, 0, 1], [1, 1, 1, 1]]
         )
+
         self.overlap_time = 0.10  # duration of the phase where all four feet are on the ground
         self.swing_time = 0.15  # duration of the phase when only two feet are on the ground
 

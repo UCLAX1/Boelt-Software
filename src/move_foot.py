@@ -11,6 +11,7 @@ config = Configuration()
 
 def moveFoot(config, legIndex, x, y, z):
     home_pos = config.homePos(legIndex)
+
     max_z = config.max_z
     min_z = config.default_z
 
