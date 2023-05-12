@@ -1,5 +1,5 @@
-from Config import Configuration
-from IK import IK
+from src.Config import Configuration
+from src.IK import IK
 
 config = Configuration()
 

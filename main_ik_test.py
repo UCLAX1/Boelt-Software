@@ -13,6 +13,7 @@ from serial import Serial
 import struct
 from ctypes import c_float
 from math import degrees
+from src.move_foot import moveFoot
 
 # Matlab notes: bl.fkine([0 0 0 0 0]) to get three possible positions in the top left of the mostly empty ans matrix (the bottom one)
 
@@ -26,11 +27,11 @@ def main():
     
 
     # FR Pos
-    back = -0.02
-    front = 0.15
-    pos1 = 0.1714
+    back = 0
+    front = 1
+    pos1 = 0
     pos2 = front
-    pos3 = -0.1883
+    pos3 = 0
 
     # BL Pos
     # back = -0.05
@@ -39,7 +40,8 @@ def main():
     # pos2 = -0.07
     # pos3 = -0.2
 
-    speed = 0.01
+    speed = 0.1
+
     # MAIN LOOP #
     while True:
         # Loop to wait for a command
@@ -56,7 +58,7 @@ def main():
             # T[2,3] = pos3
 
             #ans = IK(0.1714, 0.05, -0.1883, 0, config, 0)
-            ans = IK(pos1, pos2, pos3, 0, config, 0)
+            ans = moveFoot(config, 0, pos1,pos2,pos3)
             print('\nIK Input: ' + str(pos1) + ', ' + str(pos2) + ', ' + str(pos3))
             print('Radians IK output: ' + str(ans))
             c_ans = list(map(c_float,list(map(degrees,ans))))
@@ -79,6 +81,7 @@ def main():
             pos2-= speed
             if pos2<back or pos2 > front:
                 speed = -speed
+                pos2 -= speed
 
 
 
