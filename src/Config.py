@@ -1,7 +1,7 @@
 import math
 import numpy as np
-from src.forward_kinematics import forwardKinematics
-from src.IK import IK
+from forward_kinematics import forwardKinematics
+from IK import IK
 
 
 class Link:
@@ -57,7 +57,8 @@ class Configuration:
         self.dt = 0.01
         self.num_phases = 4
         self.contact_phases = np.array(
-            [[1, 0, 1, 1], [1, 1, 1, 1], [1, 1, 1, 0] , [1, 1, 1, 1], [0, 1, 1, 1], [1, 1, 1, 1], [1, 1, 0, 1], [1, 1, 1, 1]]
+            [[1, 0, 1, 1], [1, 1, 1, 1], [1, 1, 1, 0], [1, 1, 1, 1], [
+                0, 1, 1, 1], [1, 1, 1, 1], [1, 1, 0, 1], [1, 1, 1, 1]]
         )
 
         self.overlap_time = 0.10  # duration of the phase where all four feet are on the ground
@@ -65,8 +66,8 @@ class Configuration:
 
         #################### DEFAULT STANCE #######################
         self.default_z = -0.1883
-        self.x_range = np.array([-0.07, 0.07])
-        self.y_range = np.array([-0.07, 0.07])
+        self.x_range = np.array([-0.04, 0.04])
+        self.y_range = np.array([-0.04, 0.04])
         self.z_height = 0.05
 
     def offset(self, legIndex):
