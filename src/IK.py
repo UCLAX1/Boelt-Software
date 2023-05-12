@@ -11,7 +11,6 @@ def IK(target, theta1, config, legIndex):
     off = config.offset(legIndex)
     link = config.link(legIndex)
     [t2, t3, t4] = IK_x(link, target, theta1+off[0])
-    print(f"t2: {wrapToPi(t2)}, t3: {wrapToPi(t3)}, t4: {wrapToPi(t4)}")
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
     return q
 
@@ -26,22 +25,21 @@ def IK_x(links, target, t1):
     t2s = [t2_1, t2_2]
     foo = abs(np.array(list(map(wrapToPi, t2s))) - 0.9153)
     I = np.argmin(foo)
-    print(f"I: {I}")
     t2 = t2s[I]
-    print(f"t2s: {t2s}")
 
     [t4_1, s4_1, c4_1] = theta4(
         px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2_1)
     [t4_2, s4_2, c4_2] = theta4(
         px, py, pz, links.L1, links.L3, links.L4, links.d2, t1, t2_2)
     t4s = [t4_1, t4_2]
-    print(f"t4s: {t4s}")
     t4 = t4s[I]
 
+    print("test :(")
+    print(c4_1)
     t3_1 = theta3(links.L3, links.L4, links.d2, pz, s4_1, c4_1, 1)
-    t3_2 = theta3(links.L3, links.L4, links.d2, pz, s4_1, c4_1, 0)
+    print("test :)")
+    t3_2 = theta3(links.L3, links.L4, links.d2, pz, s4_2, c4_2, 0)
     t3s = [t3_1, t3_2]
-    print(f"t3s: {t3s}")
 
     t3 = t3s[I]
     q = np.array([t2, t3, t4])
@@ -74,7 +72,6 @@ def theta4(px, py, pz, L1, L3, L4, d2, t1, t2):
     b = -L3**2 - L4**2 + d2**2 - 2*d2*pz + px**2*math.cos(t1+t2)**2
     c = px*py*math.sin(2*t1 + 2*t2) + py**2*math.sin(t1+t2)**2 + pz**2
 
-    print(f"b:{b}")
     c4 = (a+b+c)/(2*L3*L4)
 
     s4 = math.sqrt(1-c4**2)
@@ -89,6 +86,9 @@ def theta3(L3, L4, d2, pz, s4, c4, solNum):
     c = pz - d2
 
     g = a**2 + b**2 - c**2
+
+    if (abs(g) < 1E5 and g < 0):
+        g = 0
 
     if (g > 0):
         t3s = [math.atan2(math.sqrt(g), c) + math.atan2(b, a),
