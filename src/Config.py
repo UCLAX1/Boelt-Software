@@ -1,7 +1,7 @@
 import math
 import numpy as np
-from forward_kinematics import forwardKinematics
-from IK import IK
+from src.forward_kinematics import forwardKinematics
+from src.IK import IK
 
 
 class Link:
