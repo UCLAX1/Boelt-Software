@@ -11,7 +11,6 @@ def IK(target, theta1, config, legIndex):
     off = config.offset(legIndex)
     link = config.link(legIndex)
     t1 = theta1+off[0]
-    print(f"t1: {t1}")
     [t2, t3, t4] = IK_x(link, target, theta1+off[0])
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
     return q
@@ -21,12 +20,10 @@ def IK_x(links, target, t1):
     px = target[0]
     py = target[1]
     pz = target[2]
-    print(f"target: {target}")
 
     t2_1 = theta2(px, py, links.L1, links.d3, t1, 0)
     t2_2 = theta2(px, py, links.L1, links.d3, t1, 1)
     t2s = [t2_1, t2_2]
-    print(f"t2s, {t2s}")
     foo = abs(np.array(list(map(wrapToPi, t2s))) - 0.9153)
     I = np.argmin(foo)
     t2 = t2s[I]

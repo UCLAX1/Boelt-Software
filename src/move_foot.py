@@ -20,7 +20,6 @@ def moveFoot(config, legIndex, x, y, z):
     z_off = choosePercent([min_z, max_z], z)
     offset = [x_off, y_off, z_off]
     target = home_pos + offset
-    print(target)
     q = IK(target, 0, config, legIndex)
     return q
 
