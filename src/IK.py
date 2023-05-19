@@ -10,6 +10,8 @@ def IK(target, theta1, config, legIndex):
 
     off = config.offset(legIndex)
     link = config.link(legIndex)
+    t1 = theta1+off[0]
+    print(f"t1: {t1}")
     [t2, t3, t4] = IK_x(link, target, theta1+off[0])
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
     return q
@@ -19,10 +21,12 @@ def IK_x(links, target, t1):
     px = target[0]
     py = target[1]
     pz = target[2]
+    print(f"target: {target}")
 
     t2_1 = theta2(px, py, links.L1, links.d3, t1, 0)
     t2_2 = theta2(px, py, links.L1, links.d3, t1, 1)
     t2s = [t2_1, t2_2]
+    print(f"t2s, {t2s}")
     foo = abs(np.array(list(map(wrapToPi, t2s))) - 0.9153)
     I = np.argmin(foo)
     t2 = t2s[I]
@@ -34,10 +38,7 @@ def IK_x(links, target, t1):
     t4s = [t4_1, t4_2]
     t4 = t4s[I]
 
-    print("test :(")
-    print(c4_1)
     t3_1 = theta3(links.L3, links.L4, links.d2, pz, s4_1, c4_1, 1)
-    print("test :)")
     t3_2 = theta3(links.L3, links.L4, links.d2, pz, s4_2, c4_2, 0)
     t3s = [t3_1, t3_2]
 
@@ -52,6 +53,8 @@ def theta2(px, py, L1, d3, t1, solNum):
     c = -d3
 
     g = a**2 + b**2 - c**2
+    if (abs(g) < 1E5 and g < 0):
+        g = 0
 
     if (g > 0):
         t2s = [math.atan2(math.sqrt(g), c) + math.atan2(b, a),
