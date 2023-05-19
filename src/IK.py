@@ -73,7 +73,6 @@ def theta4(px, py, pz, L1, L3, L4, d2, t1, t2):
     c = px*py*math.sin(2*t1 + 2*t2) + py**2*math.sin(t1+t2)**2 + pz**2
 
     c4 = (a+b+c)/(2*L3*L4)
-
     s4 = math.sqrt(1-c4**2)
     t4 = math.atan2(s4, c4)
     # t4_2 = atan2(-s4, c4)
