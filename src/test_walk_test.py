@@ -2,7 +2,7 @@ import walk_test
 import move_foot as mf
 from Config import Configuration
 
-iterations = 1
+iterations = 5
 config = Configuration()
 answer = mf.moveFoot(config, 0, 0.5, 0.5, 0)
 answer1 = mf.moveFoot(config, 1, 0.5, 0.5, 0)
