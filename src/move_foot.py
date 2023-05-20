@@ -1,5 +1,5 @@
-from src.Config import Configuration
-from src.IK import IK
+from Config import Configuration
+from IK import IK
 
 config = Configuration()
 
@@ -27,6 +27,3 @@ def moveFoot(config, legIndex, x, y, z):
 
 def choosePercent(range, x):
     return (range[1]-range[0])*x + range[0]
-
-
-q = moveFoot(config, 0, 0.5, 0.5, 0)
