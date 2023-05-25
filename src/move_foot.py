@@ -21,6 +21,7 @@ def moveFoot(config, legIndex, x, y, z):
     offset = [x_off, y_off, z_off]
     home_pos[2] = 0
     target = home_pos + offset
+    print(target)
     q = IK(target, 0, config, legIndex)
     return q
 
