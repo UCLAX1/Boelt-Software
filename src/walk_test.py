@@ -36,9 +36,14 @@ def leg_motion(leg, startingPercent, endingPercent, increment, currentPos, queue
             zCount = zCount + (increment * rateOfGrowth) / 100
         else:
             currentPos[leg] = mf.moveFoot(config, leg, 0.5, i/100, zCount)
+<<<<<<< HEAD
             # z should go back down to 0 in the second half of the traversal
             zCount = zCount - (increment * rateOfGrowth) / 100
         queueOfPos.append(currentPos)
+=======
+            zCount = zCount - (increment * rateOfGrowth) / 100 #z should go back down to 0 in the second half of the traversal
+        queueOfPos.append(currentPos.copy())
+>>>>>>> b14f585e350d91d5320868010092525a74b43103
     print(f"Leg {leg}: Moved from {startingPercent} to {endingPercent}")
 
 
@@ -49,6 +54,7 @@ def body_motion(distance, positions, increment, currentPos, queueOfPos):
     positions[2] = int(positions[2] * 100)
     positions[3] = int(positions[3] * 100)
     for i in range(0, distance + increment, increment):
+<<<<<<< HEAD
         currentPos[0] = mf.moveFoot(
             config, 0, 0.5, (positions[0] - i) / 100, 0.0)
         currentPos[1] = mf.moveFoot(
@@ -61,6 +67,14 @@ def body_motion(distance, positions, increment, currentPos, queueOfPos):
     print(
         f"Body motion: All four legs move back in stance by {distance} workspace length")
 
+=======
+        currentPos[0] = mf.moveFoot(config, 0, 0.5, (positions[0] - i) / 100, 0.0)
+        currentPos[1] = mf.moveFoot(config, 1, 0.5, (positions[1] - i) /100, 0.0)
+        currentPos[2] = mf.moveFoot(config, 2, 0.5, (positions[2] - i) /100, 0.0)
+        currentPos[3] = mf.moveFoot(config, 3, 0.5, (positions[3] - i) / 100, 0.0)
+        queueOfPos.append(currentPos.copy())
+    print(f"Body motion: All four legs move back in stance by {distance} workspace length")
+>>>>>>> b14f585e350d91d5320868010092525a74b43103
 
 def startup(increment, currentPos, queueOfPos):
     # Assume stable (all legs at 0.5)

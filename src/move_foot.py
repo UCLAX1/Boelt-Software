@@ -28,6 +28,3 @@ def moveFoot(config, legIndex, x, y, z):
 
 def choosePercent(range, x):
     return (range[1]-range[0])*x + range[0]
-
-
-q = moveFoot(config, 0, 0.5, 0.5, 0)
