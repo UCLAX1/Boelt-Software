@@ -47,10 +47,8 @@ class Configuration:
         self._t1 = math.atan2(self._x1, self._y1)
         self._t2 = math.atan2(self._x2, self._y2)
         self._off_fr = np.array([self._t1, math.pi/2-self._t1, -math.pi/2, 0])
-        self._off_fl = np.array(
-            [math.pi-self._t1, self._t1-math.pi/2, -math.pi/2, 0])
-        self._off_bl = np.array(
-            [self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2, 0])
+        self._off_fl = np.array([math.pi-self._t1, self._t1-math.pi/2, -math.pi/2, 0])
+        self._off_bl = np.array([self._t2-math.pi, -math.pi/2-self._t2, -math.pi/2, 0])
         self._off_br = np.array([-self._t2, self._t2+math.pi/2, -math.pi/2, 0])
 
         #################### GAIT #######################
@@ -67,7 +65,7 @@ class Configuration:
         #################### DEFAULT STANCE #######################
         self.default_z = -0.1883
         self.x_range = np.array([-0.04, 0.04])
-        self.y_range = np.array([-0.04, 0.04])
+        self.y_range = np.array([-0.125, 0.125])
         self.z_height = 0.05
 
     def offset(self, legIndex):

@@ -1,4 +1,4 @@
-#Phase 1:
+# Phase 1:
 #
 #   leg 4:
 #    forward by one workspace length
@@ -9,7 +9,7 @@
 #    body motion:
 #    all four legs move back in stance by half a workspace length
 #
-#Phase 2:
+# Phase 2:
 #
 #    leg 3:
 #    forward by one workspace length
@@ -22,54 +22,93 @@ from Config import Configuration
 
 config = Configuration()
 
-def leg_motion(leg, startingPercent, endingPercent, increment):
+
+def leg_motion(leg, startingPercent, endingPercent, increment, currentPos, queueOfPos):
+    startingPercent = int(startingPercent * 100)
+    endingPercent = int(endingPercent * 100)
     distance = (endingPercent - startingPercent) / 2
-    rateOfGrowth = 1/distance
+    rateOfGrowth = 100/distance
     zCount = 0.0
     for i in range(startingPercent, endingPercent + increment, increment):
-        if(i < (startingPercent + distance)): #if not at halfway point
-            mf.moveFoot(config, leg, 0.5, i, zCount)
-            zCount = zCount + (increment * rateOfGrowth) #z should be growing at a faster rate to get to 1 at the halfway
+        if (i < (startingPercent + distance)):  # if not at halfway point
+            currentPos[leg] = mf.moveFoot(config, leg, 0.5, i / 100, zCount)
+            # z should be growing at a faster rate to get to 1 at the halfway
+            zCount = zCount + (increment * rateOfGrowth) / 100
         else:
-            mf.moveFoot(config, leg, 0.5, i, zCount)
-            zCount = zCount - (increment * rateOfGrowth) #z should go back down to 0 in the second half of the traversal
+            currentPos[leg] = mf.moveFoot(config, leg, 0.5, i/100, zCount)
+<<<<<<< HEAD
+            # z should go back down to 0 in the second half of the traversal
+            zCount = zCount - (increment * rateOfGrowth) / 100
+        queueOfPos.append(currentPos)
+=======
+            zCount = zCount - (increment * rateOfGrowth) / 100 #z should go back down to 0 in the second half of the traversal
+        queueOfPos.append(currentPos.copy())
+>>>>>>> b14f585e350d91d5320868010092525a74b43103
     print(f"Leg {leg}: Moved from {startingPercent} to {endingPercent}")
 
-def body_motion(distance, positions, increment):
+
+def body_motion(distance, positions, increment, currentPos, queueOfPos):
+    distance = int(distance * 100)
+    positions[0] = int(positions[0] * 100)
+    positions[1] = int(positions[1] * 100)
+    positions[2] = int(positions[2] * 100)
+    positions[3] = int(positions[3] * 100)
     for i in range(0, distance + increment, increment):
-        mf.moveFoot(config, 0, 0.5, positions[0] - i, 0.0)
-        mf.moveFoot(config, 1, 0.5, positions[1] - i, 0.0)
-        mf.moveFoot(config, 2, 0.5, positions[2] - i, 0.0)
-        mf.moveFoot(config, 3, 0.5, positions[3] - i, 0.0)
+<<<<<<< HEAD
+        currentPos[0] = mf.moveFoot(
+            config, 0, 0.5, (positions[0] - i) / 100, 0.0)
+        currentPos[1] = mf.moveFoot(
+            config, 1, 0.5, (positions[1] - i) / 100, 0.0)
+        currentPos[2] = mf.moveFoot(
+            config, 2, 0.5, (positions[2] - i) / 100, 0.0)
+        currentPos[3] = mf.moveFoot(
+            config, 3, 0.5, (positions[3] - i) / 100, 0.0)
+        queueOfPos.append(currentPos)
+    print(
+        f"Body motion: All four legs move back in stance by {distance} workspace length")
+
+=======
+        currentPos[0] = mf.moveFoot(config, 0, 0.5, (positions[0] - i) / 100, 0.0)
+        currentPos[1] = mf.moveFoot(config, 1, 0.5, (positions[1] - i) /100, 0.0)
+        currentPos[2] = mf.moveFoot(config, 2, 0.5, (positions[2] - i) /100, 0.0)
+        currentPos[3] = mf.moveFoot(config, 3, 0.5, (positions[3] - i) / 100, 0.0)
+        queueOfPos.append(currentPos.copy())
     print(f"Body motion: All four legs move back in stance by {distance} workspace length")
+>>>>>>> b14f585e350d91d5320868010092525a74b43103
 
-def startup(increment):
-    #Assume stable (all legs at 0.5) 
-    leg_motion(2, 0.5, 1.0, increment) # Leg 2 forward from 0.5 to 1.0
-    leg_motion(1, 0.5, 1.0, increment) # Leg 1 forward from 0.5 to 1.0 
-    body_motion(0.5, [0.5,1.0,1.0,0.5], increment) # move body forward to normalize legs 2 and 1 to 0.5 
-                                        # legs 0 and 3 are at 0
-def phase1(increment):
+def startup(increment, currentPos, queueOfPos):
+    # Assume stable (all legs at 0.5)
+    # Leg 2 forward from 0.5 to 1.0
+    leg_motion(2, 0.5, 1.0, increment, currentPos, queueOfPos)
+    # Leg 1 forward from 0.5 to 1.0
+    leg_motion(1, 0.5, 1.0, increment, currentPos, queueOfPos)
+    # move body forward to normalize legs 2 and 1 to 0.5
+    body_motion(0.5, [0.5, 1.0, 1.0, 0.5], increment, currentPos, queueOfPos)
+    # legs 0 and 3 are at 0
+
+
+def phase1(increment, currentPos, queueOfPos):
  # Now legs are in position to begin Phase 1
-    leg_motion(3, 0.0, 1.0, increment)  # Leg 3 forward by one workspace length
-    leg_motion(0, 0.0, 1.0, increment)  # Leg 0 forward by one workspace length
-    body_motion(0.5, [1.0,0.5,0.5,1.0], increment)  # move body forward to normalize legs 3 and 0 to 0.5 
-                                         # legs 2 and 1 are at 0
+    # Leg 3 forward by one workspace length
+    leg_motion(3, 0.5, 1.0, increment, currentPos, queueOfPos)
+    # Leg 0 forward by one workspace length
+    leg_motion(0, 0.5, 1.0, increment, currentPos, queueOfPos)
+    # move body forward to normalize legs 3 and 0 to 0.5
+    body_motion(0.5, [1.0, 0.5, 0.5, 1.0], increment, currentPos, queueOfPos)
+    # legs 2 and 1 are at 0
 
-def phase2(increment):
-# Now legs are in position to begin Phase 2
-    leg_motion(2, 0.0, 1.0, increment)  # Leg 2 forward by one workspace length
-    leg_motion(2, 0.0, 1.0, increment)  # Leg 1 forward by one workspace length
-    body_motion(0.5, [0.5,1.0,1.0,0.5], increment)  # move body forward to normalize legs 2 and 1 to 0.5 
-                                         # legs 0 and 3 are at 0
-def walking(increment):
-   startup(increment)
-   while(increment):
-    phase1(increment)
-    phase2(increment)
 
-    
+def phase2(increment, currentPos, queueOfPos):
+    # Now legs are in position to begin Phase 2
+    # Leg 2 forward by one workspace length
+    leg_motion(2, 0.0, 1.0, increment, currentPos, queueOfPos)
+    # Leg 1 forward by one workspace length
+    leg_motion(1, 0.0, 1.0, increment, currentPos, queueOfPos)
+    # move body forward to normalize legs 2 and 1 to 0.5
+    body_motion(0.5, [0.5, 1.0, 1.0, 0.5], increment, currentPos, queueOfPos)
+    # legs 0 and 3 are at 0
 
-walking(0.0001)
 
-    
+def walking(increment, currentPos, queueOfPos):
+    phase1(increment, currentPos, queueOfPos)
+    phase2(increment, currentPos, queueOfPos)
