@@ -11,14 +11,10 @@ def IK(target, theta1, config, legIndex):
     off = config.offset(legIndex)
     link = config.link(legIndex)
     t1 = theta1+off[0]
-<<<<<<< HEAD
-    [t2, t3, t4] = IK_x(link, target, theta1+off[0])
-=======
     # print(f"t1: {t1}")
     [t2, t3, t4] = IK_x(link, target, theta1+off[0], off)
->>>>>>> Sari
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
-    return q
+    return np.array(map(wrapToPi, q))
 
 
 def IK_x(links, target, t1, off):
