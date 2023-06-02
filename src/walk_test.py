@@ -36,7 +36,8 @@ def leg_motion(leg, startingPercent, endingPercent, increment, currentPos, queue
             zCount = zCount + (increment * rateOfGrowth) / 100
         else:
             currentPos[leg] = mf.moveFoot(config, leg, 0.5, i/100, zCount)
-            zCount = zCount - (increment * rateOfGrowth) / 100 #z should go back down to 0 in the second half of the traversal
+            # z should go back down to 0 in the second half of the traversal
+            zCount = zCount - (increment * rateOfGrowth) / 100
         queueOfPos.append(currentPos.copy())
     print(f"Leg {leg}: Moved from {startingPercent} to {endingPercent}")
 
