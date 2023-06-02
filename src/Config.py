@@ -65,7 +65,7 @@ class Configuration:
         #################### DEFAULT STANCE #######################
         self.default_z = -0.1883
         self.x_range = np.array([-0.04, 0.04])
-        self.y_range = np.array([-0.125, 0.125])
+        self.y_range = np.array([-0.1, 0.1]) #changed
         self.z_height = 0.05
 
     def offset(self, legIndex):

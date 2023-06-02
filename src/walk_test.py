@@ -63,19 +63,24 @@ def startup(increment, currentPos, queueOfPos):
     # Leg 1 forward from 0.5 to 1.0
     leg_motion(1, 0.5, 1.0, increment, currentPos, queueOfPos)
     # move body forward to normalize legs 2 and 1 to 0.5
+    print(currentPos)
+    print()
     body_motion(0.5, [0.5, 1.0, 1.0, 0.5], increment, currentPos, queueOfPos)
+    print(currentPos)
+
     # legs 0 and 3 are at 0
 
 
 def phase1(increment, currentPos, queueOfPos):
  # Now legs are in position to begin Phase 1
     # Leg 3 forward by one workspace length
-    leg_motion(3, 0.5, 1.0, increment, currentPos, queueOfPos)
+    leg_motion(3, 0, 1.0, increment, currentPos, queueOfPos)
     # Leg 0 forward by one workspace length
-    leg_motion(0, 0.5, 1.0, increment, currentPos, queueOfPos)
+    leg_motion(0, 0, 1.0, increment, currentPos, queueOfPos)
     # move body forward to normalize legs 3 and 0 to 0.5
     body_motion(0.5, [1.0, 0.5, 0.5, 1.0], increment, currentPos, queueOfPos)
     # legs 2 and 1 are at 0
+    print("phase 1")
 
 
 def phase2(increment, currentPos, queueOfPos):
@@ -87,6 +92,7 @@ def phase2(increment, currentPos, queueOfPos):
     # move body forward to normalize legs 2 and 1 to 0.5
     body_motion(0.5, [0.5, 1.0, 1.0, 0.5], increment, currentPos, queueOfPos)
     # legs 0 and 3 are at 0
+    print("phase 2")
 
 
 def walking(increment, currentPos, queueOfPos):

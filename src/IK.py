@@ -14,7 +14,7 @@ def IK(target, theta1, config, legIndex):
     # print(f"t1: {t1}")
     [t2, t3, t4] = IK_x(link, target, theta1+off[0], off)
     q = np.array([theta1, t2-off[1], t3-off[2], t4])
-    return np.array(map(wrapToPi, q))
+    return np.array(list(map(wrapToPi, q)))
 
 
 def IK_x(links, target, t1, off):

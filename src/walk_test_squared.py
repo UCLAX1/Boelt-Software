@@ -8,7 +8,7 @@ from time import sleep
 import struct
 
 
-iterations = 5
+iterations = 1
 config = Configuration()
 answer = mf.moveFoot(config, 0, 0.5, 0.5, 0)
 answer1 = mf.moveFoot(config, 1, 0.5, 0.5, 0)
@@ -29,14 +29,14 @@ walk_test.startup(increment, currentPos, queueOfPos)
 # for i, value in enumerate(currentPos):
 #     print(f"Index {i}: {value}")
 # sleep(100)
-while (iterations > 0):
-    walk_test.walking(increment, currentPos, queueOfPos)
-    # Print the values of currentPos after each walking call
-    # print("Values of currentPos after walking:")
-    # for i, value in enumerate(currentPos):
-    #     print(f"Index {i}: {value}")
-    iterations = iterations - 1
-# print("QUEUE OF POS"+str(queueOfPos))
+# while (iterations > 0):
+#     walk_test.walking(increment, currentPos, queueOfPos)
+#     # Print the values of currentPos after each walking call
+#     # print("Values of currentPos after walking:")
+#     # for i, value in enumerate(currentPos):
+#     #     print(f"Index {i}: {value}")
+#     iterations = iterations - 1
+# # print("QUEUE OF POS"+str(queueOfPos))
 while (len(queueOfPos) > 0):
     # print("Length of QOP: " + str(len(queueOfPos)))
     # print("last QOP: " + str(queueOfPos[-1]))
@@ -61,6 +61,6 @@ while (len(queueOfPos) > 0):
     # Send the packed data over serial
     ser.write(packed_data)
     print('sent data')
-    #sleep(.001)
+    #sleep(.01)
 
-    #junk = input('Continue')
+    junk = input('Continue')
