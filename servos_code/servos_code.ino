@@ -61,10 +61,10 @@ int servo_pins[] = {5, 4, 3, 6, 8, 7, 12, 24, 25, 36, 29, 28};
 
 int default_pos[] = {
 // leg thigh hip
-    84, 82,  85, //FL
-    89, 112, 82, //FR
-    101, 74, 99, //BL
-    95, 101, 88  //BR
+    88, 118, 85, //FL
+    90, 106, 65, //FR
+    100, 83, 99, //BL
+    99, 90, 88  //BR
     };
 //initialize legs
 Leg LegFL(1, &servos[0], &servos[1], &servos[2], default_pos[0], default_pos[1], default_pos[2]);
@@ -93,7 +93,7 @@ int input;
 int off1 = 85; //leg FR
 int off2 = 100; //leghip FR
 int off3 = 115; //hip FR
-float data[4] = {0}; // Change 4 to 16 for all values
+float data[16] = {0}; // Change 4 to 16 for all values
 
 
  
@@ -123,10 +123,10 @@ void setup()
 
 
 void readFloatArray(float* data) {
-  uint8_t buffer[sizeof(float) * 4]; // Change to 16 for all values
+  char buffer[sizeof(float) * 16]; // Change to 16 for all values
 
   // Wait until a complete binary data packet is available
-  while (Serial.available() < sizeof(buffer)) {
+  while (int(Serial.available()) < int(sizeof(buffer))) {
     delay(1);
   }
 
@@ -134,7 +134,7 @@ void readFloatArray(float* data) {
   Serial.readBytes(buffer, sizeof(buffer));
 
   // Unpack the binary data into an array of four floats
-  for (int i = 0; i < 4; i++) { // Change 4 to 16 for all values
+  for (int i = 0; i < 16; i++) { // Change 4 to 16 for all values
     memcpy(&data[i], &buffer[i * sizeof(float)], sizeof(float));
   }
   
@@ -161,23 +161,22 @@ void loop() {
 //  Serial.println(data[3]);
 
   // leg, hipleg, hip
-  float angles1[] = {-data[3], data[2], data[1]};
-//  float angles2[] = {data[6], data[5], data[4]}; // Reflect: 
-//  float angles3[] = {data[10], data[9], data[8]};
-//  float angles4[] = {data[14], data[13], data[12]};
-  float custom[] = {-90,-90,0};
+  float angles1[] = {-data[3], data[2], data[1]}; // first negative
+  float angles2[] = {data[7], -data[6], data[5]}; 
+  float angles3[] = {data[11], -data[10], data[9]};
+  float angles4[] = {-data[15], data[14], data[13]};
+  // float custom[] = {-90,-90,0};
   Serial.println("ANGLES:");
-  Serial.println(angles1[0]);
-  Serial.println(angles1[1]);
-  Serial.println(angles1[2]);
+  Serial.println(angles3[0]);
+  Serial.println(angles3[1]);
+  Serial.println(angles3[2]);
 
 
   //float angles2[] = {data[1], data[2], -data[3]};
   LegFR.move(angles1); //angles1
-//  LegFL.move(angles2); //angles2
-  //LegBL.move(angles3); //angles 3
-  //LegBR.move(angles4);  //angles 4
-  //servos[9].write(input);
-  delay(75);
+  LegFL.move(angles2); //angles2
+  LegBL.move(angles3); //angles3
+  LegBR.move(angles4);  //angles4
+  delay(5);
   }
 }
